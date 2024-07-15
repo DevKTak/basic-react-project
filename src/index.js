@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import Accommodate from './chapter_07/Accommodate';
+// import Accommodate from './chapter_07/Accommodate';
+import Board from './official_document/Tic-Tac-Toe/Board';
+import './style.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <Accommodate />,
+    // <Accommodate />,
+    <Board />,
   // </React.StrictMode>,
   document.getElementById('root')
 );
