@@ -10,32 +10,25 @@ function Square({ value, onSquareClick }) {
   return <button className="square" onClick={onSquareClick}>{value}</button>;
 }
 
-export default function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  
+function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) { 
-    // 이미 클릭된 버튼이거나 이미 승부가 났으면 리턴
-    if (squares[i] || calculateWinner(squares)) {
+    if (calculateWinner(squares)) {
+      alert('게임이 종료되었습니다.');
+      return;
+    }
+    if (squares[i]) {
+      alert('이미 선택 된 버튼입니다.');
       return;
     }
     const nextSquares = squares.slice(); // React에서 상태를 업데이트할 때는 불변성(Immutability)을 유지하는 것이 중요합니다.
     nextSquares[i] = xIsNext ? 'X' : 'O';
 
-    setSquares(nextSquares); // 이를 통해 React는 상태가 변경되었음을 감지하고 UI를 업데이트할 수 있습니다.
-    setXIsNext(!xIsNext);
-
-    // const winner = calculateWinner(squares);
-    // let status = winner ? "Winner: " + winner : "Next player: " + (xIsNext ? "X" : "O");
-    const winner = calculateWinner(squares);
-    // const status = 'a';
-    const status = winner ? 'Winner: ' + winner : 'Next player: ' + (xIsNext ? 'X' : 'O');
-    // if (winner) {
-    //   status = 'Winner: ' + winner;
-    // } else {
-    //   status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-    // }
+    onPlay(nextSquares);
   }
+
+  // 게임이 종료되었는지 계산하는 함수
+  const winner = calculateWinner(squares);
+  const status = winner ? 'Winner: ' + winner : 'Next player: ' + (xIsNext ? 'X' : 'O');
 
   return (
     <>
@@ -79,5 +72,46 @@ function calculateWinner(squares) {
       return squares[a];
     }
   }
+
   return null;
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]); // 2차원 배열로 각 상태를 기록
+  const currentSquares = history[history.length - 1];
+
+  function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]); // ...: 전개 연산자(스프레드 연산자)
+    setXIsNext(!xIsNext);
+  }
+
+  function jumpTo(nextMove) {
+    // TODO
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = 'Go to move #' + move;
+    } else {
+      description = 'Go to game start';
+    }
+    return (
+      <li>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{moves}</ol>
+      </div>
+    </div>
+  );
 }
