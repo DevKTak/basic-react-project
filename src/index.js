@@ -4,8 +4,9 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 // import Accommodate from './chapter_07/Accommodate';
-import Board from './official_document/Tic-Tac-Toe/Board';
+// import Board from './official_document/Tic-Tac-Toe/Board';
 import './style.css';
+import Calculator from './chapter_12/Calculator';
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
@@ -13,7 +14,8 @@ const root = ReactDOM.createRoot(container);
 root.render(
   // <React.StrictMode>
     // <Accommodate />,
-    <Board />,
+    // <Board />,
+    <Calculator />
   // </React.StrictMode>,
   // document.getElementById('root')
 );
